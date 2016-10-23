@@ -1,10 +1,16 @@
 from sqlalchemy import create_engine
-import panda as pd
+import pandas as pd
 from pandas import io
 
+rootdir = "/scratch/jslab/aws/"
+csvfile = rootdir + "transactions.csv"
+transcsv = pd.read_csv(csvfile, iterator=True, chunksize = 1000000)
 
-csvfile = "/Documents/transactions.csv"
+engine = create_engine('sqlite:///'+rootdir + 'trans.sqlite')
 
-transactions_df = pd.read_csv(csvfile, iterator=True, chunksize = 10000)
+tablecur = transcsv.next()
+tablecur.head()
 
-engine = create_engine('')
+for tablecur in transcsv:
+tablecur.to_sql('trans',engine,if_exists='append')
+
