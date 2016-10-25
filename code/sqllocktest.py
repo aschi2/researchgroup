@@ -4,7 +4,7 @@ from pandas import io
 
 rootdir = "/scratch/jslab/aws/"
 csvfile = rootdir + "transactions.csv"
-transcsv = pd.read_csv(csvfile, iterator=True, chunksize = 1000000)
+transcsv = pd.read_csv(csvfile, iterator=True, chunksize = 100000)
 
 engine = create_engine('sqlite:///'+rootdir + 'trans.sqlite')
 
