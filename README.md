@@ -7,7 +7,7 @@ Takes lat (float), lon (float), time (int), and api key (string) (optional), ret
 ## toUnix(d,time)
 Takes in Date (DateTime Object?) and Time(Int?), returns unix time.
 ## GOElevation(lat,lon,api)
-"""Takes lat (float), lon (float), and api key (string) (optional), returns a float number """
+Takes lat (float), lon (float), and api key (string) (optional), returns a float number
 
 
 
