@@ -47,6 +47,7 @@ def GOElevation(lat,lon,api = "AIzaSyCDrKYZg1yY9uGU078F-vgtw9T2mcmn4-0"):
         return np.nan
 
 def ReverseGeo(lat=35.1330343, lon=-90.0625056, api='AIzaSyBwTLTIHYJU_osZ-KKE-HlTH9EcowYJjDs'):
+    """Takes lat (float), lon (float), and api key (string) (optional), returns zipcode for now, plan to return distance to nearest city in the future"""
     sensor = 'false'
     base = "https://maps.googleapis.com/maps/api/geocode/json?"
     params = "latlng={lat},{lon}&sensor={sen}&result_type=postal_code&key={api}".format(
