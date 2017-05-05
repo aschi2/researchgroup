@@ -5,7 +5,7 @@ from datetime import datetime
 from urllib2 import Request, urlopen
 import numpy as np
 
-def DSTimeMachine(lat, lon, time,api = 'ae81c74d7b434000492e19b44facafc0'):
+def DSTimeMachine(lat, lon, time,api):
     """Takes lat (float), lon (float), time (int) and api key (string) (optional), returns an 1 x n pandas dataframe."""
     url = "https://api.darksky.net/forecast/%s/%f,%f,%d"
     query = url % (api,lat,lon,time)
@@ -32,7 +32,7 @@ def toUnix(d, time):
     datetime_object = datetime.strptime(date, '%Y-%m-%d %H:%M')
     return (datetime_object - datetime(1970,1,1)).total_seconds()
 
-def GOElevation(lat,lon,api = "AIzaSyCDrKYZg1yY9uGU078F-vgtw9T2mcmn4-0"):
+def GOElevation(lat,lon,api):
     """Takes lat (float), lon (float), and api key (string) (optional), returns a float number """
     url = "https://maps.googleapis.com/maps/api/elevation/json?locations=%f,%f&key=%s"
     qurl = url % (lat,lon,api)
@@ -46,7 +46,7 @@ def GOElevation(lat,lon,api = "AIzaSyCDrKYZg1yY9uGU078F-vgtw9T2mcmn4-0"):
     except:
         return np.nan
 
-def ReverseGeo(lat=35.1330343, lon=-90.0625056, api='AIzaSyBwTLTIHYJU_osZ-KKE-HlTH9EcowYJjDs'):
+def ReverseGeo(lat=35.1330343, lon=-90.0625056, api):
     """Takes lat (float), lon (float), and api key (string) (optional), returns zipcode for now, plan to return distance to nearest city in the future"""
     sensor = 'false'
     base = "https://maps.googleapis.com/maps/api/geocode/json?"
