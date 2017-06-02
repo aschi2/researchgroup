@@ -1,0 +1,2 @@
+model_checkpoint_path: "C://tmp//BIG_RUN-2LAYER-4000.model"
+all_model_checkpoint_paths: "C://tmp//BIG_RUN-2LAYER-4000.model"

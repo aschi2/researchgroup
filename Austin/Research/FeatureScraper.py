@@ -46,7 +46,7 @@ def GOElevation(lat,lon,api):
     except:
         return np.nan
 
-def ReverseGeo(lat=35.1330343, lon=-90.0625056, api):
+def ReverseGeo(lat, lon, api):
     """Takes lat (float), lon (float), and api key (string) (optional), returns zipcode for now, plan to return distance to nearest city in the future"""
     sensor = 'false'
     base = "https://maps.googleapis.com/maps/api/geocode/json?"
