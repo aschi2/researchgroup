@@ -18,7 +18,7 @@ def DSTimeMachine(lat, lon, time,api):
     except:
         return np.nan
 
-def toUnix(d, time):
+def fromStringtoUnix(d, time):
     """Takes in Date (DateTime Object?) and Time(Int?), returns unix time"""
     time = str(time)
     if (len(time) == 3):
@@ -27,6 +27,7 @@ def toUnix(d, time):
     extra = ":" + extra
     time = time[:-2]
     time = time + extra
+    d = datetime.strptime(str.split(d)[0],'%Y-%m-%d')
     date = d.strftime('%Y-%m-%d')
     date = date+" "+time
     datetime_object = datetime.strptime(date, '%Y-%m-%d %H:%M')
@@ -46,7 +47,7 @@ def GOElevation(lat,lon,api):
     except:
         return np.nan
 
-def ReverseGeo(lat, lon, api):
+def ReverseGeoZip(lat, lon, api):
     """Takes lat (float), lon (float), and api key (string) (optional), returns zipcode for now, plan to return distance to nearest city in the future"""
     sensor = 'false'
     base = "https://maps.googleapis.com/maps/api/geocode/json?"
@@ -62,5 +63,31 @@ def ReverseGeo(lat, lon, api):
     try:
         zipcode = x['results'][0]['address_components'][0]['short_name']
         return zipcode
+    except:
+        return np.nan
+
+
+def ReverseGeoState(lat, lon, api, short = True):
+    """Takes lat (float), lon (float), and api key (string) (optional), returns State, short bool will return short name if true, long name if false"""
+    sensor = 'false'
+    base = "https://maps.googleapis.com/maps/api/geocode/json?"
+    params = "latlng={lat},{lon}&sensor={sen}&result_type=postal_code&key={api}".format(
+        lat=lat,
+        lon=lon,
+        sen=sensor,
+        api=api
+    )
+    url = "{base}{params}".format(base=base, params=params)
+    response = requests.get(url)
+    x = json.loads(response.text)
+    if short == False:
+        try:
+            longname = x['results'][0]['address_components'][3]['long_name']
+            return longname
+        except:
+            return np.nan
+    try:
+        shortname = x['results'][0]['address_components'][3]['short_name']
+        return shortname
     except:
         return np.nan

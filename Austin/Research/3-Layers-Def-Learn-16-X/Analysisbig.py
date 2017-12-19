@@ -45,7 +45,7 @@ test_net = tfl.layers.core.fully_connected(test_net,2,activation='softmax',bias 
 #                                           This learning rate seems to marginally help with local minimums
 test_net = tfl.layers.estimator.regression(test_net, name = "output")
 
-model = tfl.DNN(test_net, tensorboard_verbose = 0,)
+model = tfl.DNN(test_net, tensorboard_verbose = 0)
 
 if os.path.exists('{}.meta'.format(MODEL_NAME)):
     model.load(MODEL_NAME)
