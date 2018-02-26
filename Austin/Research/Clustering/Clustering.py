@@ -30,16 +30,38 @@ def standardize(x):
         sx.append((x[i] - mu)/sd)
     return sx
 
+def dendro(balltree):
+    groupnum = list()
+    i = .001
+    while(i<.01):
+        sparse = radius_neighbors_graph(tree, i,n_jobs=-1)
+        gr = Graph(sparse)
+        cc = connected_components(gr)
+        con_list = list(cc)
+        groupnum.append(len(con_list))
+        i = i+.01
+    return(groupnum)
+
 
 time = standardize(df.UNIX)
 lat = standardize(df.LAT)
 long = standardize(df.LONG)
 matrix = numpy.asarray((time,lat,long)).T
 tree = BallTree(matrix)
-sparse = radius_neighbors_graph(tree, .1)
+
+dendrograph = dendro(tree)
+
+sparse = radius_neighbors_graph(tree, .1,n_jobs=-1)
 gr = Graph(sparse)
 cc = connected_components(gr)
 con_list = list(cc)
+
+# create membership vector
+n = len(data)
+membership = np.zeros(n)
+for i, comp in enumerate(cc):
+    membership[list(comp)] = i
+
 
 def ret_group(num,list):
     for i in xrange(len(list)):
