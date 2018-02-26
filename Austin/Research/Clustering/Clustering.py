@@ -56,12 +56,6 @@ gr = Graph(sparse)
 cc = connected_components(gr)
 con_list = list(cc)
 
-# create membership vector
-n = len(data)
-membership = np.zeros(n)
-for i, comp in enumerate(cc):
-    membership[list(comp)] = i
-
 
 def ret_group(num,list):
     for i in xrange(len(list)):
