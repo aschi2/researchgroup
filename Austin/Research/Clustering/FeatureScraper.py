@@ -2,7 +2,7 @@ import requests
 import json
 import pandas
 from datetime import datetime
-from urllib2 import Request, urlopen
+from urllib.request import urlopen, Request
 import numpy as np
 
 def DSTimeMachine(lat, lon, time,api):

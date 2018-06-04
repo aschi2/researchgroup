@@ -5,13 +5,15 @@ from sklearn.neighbors import BallTree,radius_neighbors_graph
 from networkx import Graph,connected_components
 import networkx as nx
 import pickle
+import sqlite3
 
 #Add time to data
+print("ok!")
 data = pandas.read_csv('fires.csv')
 def addTime(data):
     """Make sure dataframe has DATE in string and TIME in labeled as GMT"""
     times = list()
-    for i in xrange(len(data['DATE'])):
+    for i in range(len(data['DATE'])):
         uni = fromStringtoUnix(data['DATE'][i],data['GMT'][i])
         times.append(uni)
     data2 = data
@@ -26,20 +28,20 @@ def standardize(x):
     mu = np.mean(x)
     sd = np.std(x)
     sx = list()
-    for i in xrange(len(x)):
+    for i in range(len(x)):
         sx.append((x[i] - mu)/sd)
     return sx
 
 def dendro(balltree):
     groupnum = list()
-    i = .001
+    i = .00001
     while(i<.01):
         sparse = radius_neighbors_graph(tree, i,n_jobs=-1)
         gr = Graph(sparse)
         cc = connected_components(gr)
         con_list = list(cc)
         groupnum.append(len(con_list))
-        i = i+.01
+        i = i+.00001
     return(groupnum)
 
 
@@ -48,29 +50,36 @@ lat = standardize(df.LAT)
 long = standardize(df.LONG)
 matrix = numpy.asarray((time,lat,long)).T
 tree = BallTree(matrix)
-
-dendrograph = dendro(tree)
-
-sparse = radius_neighbors_graph(tree, .1,n_jobs=-1)
+groupnum = list()
+sparse = radius_neighbors_graph(tree, .05,n_jobs=-1)
 gr = Graph(sparse)
 cc = connected_components(gr)
 con_list = list(cc)
+groupnum.append(len(con_list))
 
+#dendrograph = dendro(tree)
+#print(dendrograph)
 
 def ret_group(num,list):
-    for i in xrange(len(list)):
+    for i in range(len(list)):
         for j in list[i]:
             if j == num:
                 return i
                 
 cluster_list = list()
-for i in xrange(len(data)):
-    cluster_list.append(ret_group(i,con_list))
+for i in range(len(data)):
+     cluster_list.append(ret_group(i,con_list))
 
 df['clusternum'] = cluster_list
 
-pickle.dump(df,open("clusterdataframe.p",'wb'))
+df['is_duplicated'] = df.duplicated(['clusternum'])
 
-pickle.dump(cluster_list,open("cluster_list.p",'wb'))
+conn = sqlite3.connect("clstr.db")
+df.to_sql("data",conn, if_exists="replace")
+truedf = df[~df.is_duplicated]
+df.to_sql("truedata",conn, if_exists="replace")
+# pickle.dump(df,open("clusterdataframe.p",'wb'))
 
-pickle.dump(cc,open("graphgenerator.p",'wb'))
+# pickle.dump(cluster_list,open("cluster_list.p",'wb'))
+
+# pickle.dump(cc,open("graphgenerator.p",'wb'))
